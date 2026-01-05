@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>综合模型库 | CV · NLP · LLM · VLM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0366d6;
+            --primary-light: #f1f8ff;
+            --primary-dark: #024ea2;
+            --secondary: #6f42c1;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #24292e;
+            --gray: #6c757d;
+            --gray-light: #eaecef;
+            --gray-lighter: #f6f8fa;
+            --border-radius: 8px;
+            --border-radius-sm: 4px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --transition: all 0.25s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--gray-lighter);
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, var(--dark) 0%, #2d333b 100%);
+            color: white;
+            padding: 3.5rem 0;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid #444d56;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(90deg, #58a6ff, #8a63d2, #db61a2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+        
+        .header-content .subtitle {
+            font-size: 1.25rem;
+            color: #8b949e;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 2rem;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: rgba(255,255,255,0.08);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255,255,255,0.15);
+            min-width: 140px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+        
+        /* 主要内容区域 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            margin-bottom: 3rem;
+        }
+        
+        /* 侧边导航 */
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-light);
+        }
+        
+        .sidebar-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .sidebar-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .sidebar-section h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-section h3 i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+        
+        .category-list {
+            list-style: none;
+        }
+        
+        .category-list li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .category-list a {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+        }
+        
+        .category-list a:hover,
+        .category-list a.active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .category-list a i {
+            width: 18px;
+            margin-right: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .category-count {
+            margin-left: auto;
+            background-color: var(--gray-light);
+            color: var(--gray);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .subcategory-list {
+            list-style: none;
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .subcategory-list.expanded {
+            max-height: 500px;
+        }
+        
+        .subcategory-list li {
+            margin-bottom: 0.3rem;
+        }
+        
+        .subcategory-list a {
+            padding: 5px 12px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .subcategory-list a:hover {
+            background-color: var(--gray-lighter);
+            color: var(--dark);
+        }
+        
+        .toggle-subcategories {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 2px;
+            transition: var(--transition);
+        }
+        
+        .toggle-subcategories:hover {
+            color: var(--primary);
+        }
+        
+        /* 分类卡片 */
+        .category-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid var(--gray-light);
+        }
+        
+        .category-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .category-header {
+            background: linear-gradient(90deg, #f6f8fa, #eaecef);
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .category-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .category-header h2 i {
+            margin-right: 12px;
+            color: var(--primary);
+        }
+        
+        .category-stats {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .category-count-large {
+            background-color: var(--primary);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .toggle-arrow {
+            color: var(--gray);
+            transition: transform 0.3s ease;
+        }
+        
+        .category-header.active .toggle-arrow {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+        
+        /* 子分类面板 */
+        .subcategory-panel {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        
+        .subcategory-panel.expanded {
+            max-height: 10000px;
+        }
+        
+        .subcategory-item {
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .subcategory-item:last-child {
+            border-bottom: none;
+        }
+        
+        .subcategory-header {
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--gray-lighter);
+            transition: var(--transition);
+        }
+        
+        .subcategory-header:hover {
+            background-color: #eef2f7;
+        }
+        
+        .subcategory-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .subcategory-header h3 i {
+            margin-right: 10px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .subcategory-count {
+            background-color: var(--gray-light);
+            color: var(--gray);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .subcategory-arrow {
+            color: var(--gray);
+            transition: transform 0.3s ease;
+            margin-left: 10px;
+        }
+        
+        .subcategory-header.active .subcategory-arrow {
+            transform: rotate(90deg);
+            color: var(--primary);
+        }
+        
+        /* 表格样式 */
+        .models-table-container {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        
+        .models-table-container.expanded {
+            max-height: 10000px;
+            padding: 1.5rem;
+        }
+        
+        .models-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        
+        .models-table th {
+            background-color: var(--gray-lighter);
+            color: var(--dark);
+            font-weight: 600;
+            text-align: left;
+            padding: 14px 16px;
+            border-bottom: 2px solid var(--gray-light);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .models-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--gray-light);
+            vertical-align: top;
+        }
+        
+        .models-table tr:hover {
+            background-color: #fafbfc;
+        }
+        
+        .models-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .model-cell {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .model-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .model-link:hover {
+            text-decoration: underline;
+            color: var(--primary-dark);
+        }
+        
+        .model-link i {
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .codebase-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: var(--border-radius-sm);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            border: 1px solid rgba(3, 102, 214, 0.2);
+        }
+        
+        .codebase-link:hover {
+            background-color: #ddeeff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .codebase-link i {
+            margin-right: 6px;
+        }
+        
+        .runtime-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: var(--border-radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .runtime-buildin {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .runtime-vllm {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: var(--border-radius-sm);
+            font-size: 0.85rem;
+            font-weight: 500;
+            background-color: #e9ecef;
+            color: #495057;
+            border: 1px solid #dee2e6;
+        }
+        
+        .toggle-details {
+            background: none;
+            border: 1px solid var(--gray-light);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: var(--border-radius-sm);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+        
+        .toggle-details:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+        
+        .toggle-details i {
+            margin-right: 6px;
+        }
+        
+        .model-list-details {
+            display: none;
+            margin-top: 12px;
+            padding: 16px;
+            background-color: var(--gray-lighter);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+        }
+        
+        .model-list-details ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 8px;
+        }
+        
+        .model-list-details li {
+            padding: 8px 12px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid var(--gray-light);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .model-list-details li:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+        }
+        
+        .model-list-details li:before {
+            content: "▸";
+            color: var(--primary);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid #444d56;
+        }
+        
+        .footer-content {
+            text-align: center;
+        }
+        
+        .footer-content p {
+            color: #8b949e;
+            margin-bottom: 1rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 2rem;
+        }
+        
+        .footer-links a {
+            color: #8b949e;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .footer-links a i {
+            margin-right: 8px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+                margin-bottom: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header-content .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .stats-container {
+                gap: 10px;
+            }
+            
+            .stat-item {
+                min-width: 120px;
+                padding: 12px 15px;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .models-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .models-table th,
+            .models-table td {
+                min-width: 140px;
+            }
+            
+            .model-list-details ul {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-links {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1><i class="fas fa-brain"></i> 综合模型库</h1>
+                <p class="subtitle">全面的计算机视觉、自然语言处理、大语言模型和视觉语言模型集合，支持多种运行环境</p>
+                
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-value">600+</div>
+                        <div class="stat-label">总模型数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">主要分类</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">40+</div>
+                        <div class="stat-label">子分类</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">运行环境</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="main-content">
+            <!-- 侧边导航 -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-list"></i> 模型分类</h3>
+                    <ul class="category-list">
+                        <li>
+                            <a href="#cv-models" class="active">
+                                <i class="fas fa-eye"></i> 计算机视觉
+                                <span class="category-count">300+</span>
+                            </a>
+                            <button class="toggle-subcategories" onclick="toggleSubcategories('cv-sub')">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <ul class="subcategory-list expanded" id="cv-sub">
+                                <li><a href="#cv-classification">分类</a></li>
+                                <li><a href="#cv-detection">目标检测</a></li>
+                                <li><a href="#cv-segmentation">分割</a></li>
+                                <li><a href="#cv-face">人脸相关</a></li>
+                                <li><a href="#cv-superres">超分辨率</a></li>
+                                <li><a href="#cv-text">文本检测识别</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#nlp-models">
+                                <i class="fas fa-language"></i> 自然语言处理
+                                <span class="category-count">100+</span>
+                            </a>
+                            <button class="toggle-subcategories" onclick="toggleSubcategories('nlp-sub')">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <ul class="subcategory-list" id="nlp-sub">
+                                <li><a href="#nlp-ie">信息抽取</a></li>
+                                <li><a href="#nlp-ner">命名实体识别</a></li>
+                                <li><a href="#nlp-qa">问答系统</a></li>
+                                <li><a href="#nlp-classification">文本分类</a></li>
+                                <li><a href="#nlp-embedding">Embedding</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#llm-models">
+                                <i class="fas fa-robot"></i> 大语言模型
+                                <span class="category-count">150+</span>
+                            </a>
+                            <button class="toggle-subcategories" onclick="toggleSubcategories('llm-sub')">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <ul class="subcategory-list" id="llm-sub">
+                                <li><a href="#llm-general">通用模型</a></li>
+                                <li><a href="#llm-domain">领域模型</a></li>
+                                <li><a href="#llm-math">数学模型</a></li>
+                                <li><a href="#llm-code">代码模型</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#vlm-models">
+                                <i class="fas fa-images"></i> 视觉语言模型
+                                <span class="category-count">50+</span>
+                            </a>
+                            <button class="toggle-subcategories" onclick="toggleSubcategories('vlm-sub')">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <ul class="subcategory-list" id="vlm-sub">
+                                <li><a href="#vlm-general">通用VLM</a></li>
+                                <li><a href="#vlm-doc">文档解析</a></li>
+                                <li><a href="#vlm-ocr">OCR增强</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-filter"></i> 运行环境</h3>
+                    <ul class="category-list">
+                        <li><a href="#buildin"><i class="fas fa-bolt"></i> Build-In 推理</a></li>
+                        <li><a href="#vllm"><i class="fas fa-server"></i> vLLM 服务</a></li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-info-circle"></i> 快速导航</h3>
+                    <ul class="category-list">
+                        <li><a href="#usage"><i class="fas fa-book"></i> 使用说明</a></li>
+                        <li><a href="#api"><i class="fas fa-code"></i> API文档</a></li>
+                        <li><a href="#examples"><i class="fas fa-play-circle"></i> 示例代码</a></li>
+                        <li><a href="#contribute"><i class="fas fa-handshake"></i> 贡献指南</a></li>
+                    </ul>
+                </div>
+            </aside>
+            
+            <!-- 主要内容 -->
+            <main>
+                <!-- CV 模型 -->
+                <div class="category-card" id="cv-models">
+                    <div class="category-header active" onclick="toggleCategory('cv-content')">
+                        <h2><i class="fas fa-eye"></i> CV Models - 计算机视觉模型</h2>
+                        <div class="category-stats">
+                            <span class="category-count-large">300+ 模型</span>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                    </div>
+                    <div class="subcategory-panel expanded" id="cv-content">
+                        <!-- 分类子类别 -->
+                        <div class="subcategory-item" id="cv-classification">
+                            <div class="subcategory-header active" onclick="toggleSubcategory('cv-classification-content')">
+                                <h3><i class="fas fa-tags"></i> 图像分类</h3>
+                                <div>
+                                    <span class="subcategory-count">50+ 模型</span>
+                                    <i class="fas fa-chevron-right subcategory-arrow"></i>
+                                </div>
+                            </div>
+                            <div class="models-table-container expanded" id="cv-classification-content">
+                                <table class="models-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="15%">模型</th>
+                                            <th width="20%">代码库</th>
+                                            <th width="30%">模型列表</th>
+                                            <th width="20%">模型类型</th>
+                                            <th width="15%">运行时</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- 分类模型示例 -->
+                                        <tr>
+                                            <td class="model-cell">
+                                                <a href="./cv/classification/cspnet/README.md" class="model-link">
+                                                    <i class="fas fa-file-alt"></i> CSPNet
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="https://github.com/rwightman/pytorch-image-models/blob/v0.6.5/timm/models/cspnet.py" class="codebase-link" target="_blank">
+                                                    <i class="fab fa-github"></i> timm
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="toggle-details" onclick="toggleModelList('cv-class-1')">
+                                                    <i class="fas fa-list"></i> 查看模型
+                                                </button>
+                                                <div class="model-list-details" id="cv-class-1">
+                                                    <ul>
+                                                        <li>cspresnet50</li>
+                                                        <li>cspresnext50</li>
+                                                        <li>cspdarknet53</li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td><span class="type-badge">classification</span></td>
+                                            <td><span class="runtime-badge runtime-buildin">Build_In</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="model-cell">
+                                                <a href="./cv/classification/resnet/README.md" class="model-link">
+                                                    <i class="fas fa-file-alt"></i> ResNet
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="https://github.com/rwightman/pytorch-image-models/blob/v0.6.5/timm/models/resnet.py" class="codebase-link" target="_blank">
+                                                    <i class="fab fa-github"></i> timm
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="toggle-details" onclick="toggleModelList('cv-class-2')">
+                                                    <i class="fas fa-list"></i> 查看模型
+                                                </button>
+                                                <div class="model-list-details" id="cv-class-2">
+                                                    <ul>
+                                                        <li>resnet18</li>
+                                                        <li>resnet34</li>
+                                                        <li>resnet50</li>
+                                                        <li>resnet101</li>
+                                                        <li>resnet152</li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td><span class="type-badge">classification</span></td>
+                                            <td><span class="runtime-badge runtime-buildin">Build_In</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- 目标检测子类别 -->
+                        <div class="subcategory-item" id="cv-detection">
+                            <div class="subcategory-header" onclick="toggleSubcategory('cv-detection-content')">
+                                <h3><i class="fas fa-bullseye"></i> 目标检测</h3>
+                                <div>
+                                    <span class="subcategory-count">80+ 模型</span>
+                                    <i class="fas fa-chevron-right subcategory-arrow"></i>
+                                </div>
+                            </div>
+                            <div class="models-table-container" id="cv-detection-content">
+                                <table class="models-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="15%">模型</th>
+                                            <th width="20%">代码库</th>
+                                            <th width="30%">模型列表</th>
+                                            <th width="20%">模型类型</th>
+                                            <th width="15%">运行时</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="model-cell">
+                                                <a href="./cv/detection/yolov5/README.md" class="model-link">
+                                                    <i class="fas fa-file-alt"></i> YOLOv5
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="https://github.com/ultralytics/yolov5/tree/v6.1" class="codebase-link" target="_blank">
+                                                    <i class="fab fa-github"></i> ultralytics
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="toggle-details" onclick="toggleModelList('cv-det-1')">
+                                                    <i class="fas fa-list"></i> 查看模型
+                                                </button>
+                                                <div class="model-list-details" id="cv-det-1">
+                                                    <ul>
+                                                        <li>yolov5n</li>
+                                                        <li>yolov5s</li>
+                                                        <li>yolov5m</li>
+                                                        <li>yolov5l</li>
+                                                        <li>yolov5x</li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td><span class="type-badge">object detection</span></td>
+                                            <td><span class="runtime-badge runtime-buildin">Build_In</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="model-cell">
+                                                <a href="./cv/detection/yolov8/README.md" class="model-link">
+                                                    <i class="fas fa-file-alt"></i> YOLOv8
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="https://github.com/ultralytics/ultralytics" class="codebase-link" target="_blank">
+                                                    <i class="fab fa-github"></i> ultralytics
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="toggle-details" onclick="toggleModelList('cv-det-2')">
+                                                    <i class="fas fa-list"></i> 查看模型
+                                                </button>
+                                                <div class="model-list-details" id="cv-det-2">
+                                                    <ul>
+                                                        <li>YOLOv8n</li>
+                                                        <li>YOLOv8s</li>
+                                                        <li>YOLOv8m</li>
+                                                        <li>YOLOv8l</li>
+                                                        <li>YOLOv8x</li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td><span class="type-badge">object detection</span></td>
+                                            <td><span class="runtime-badge runtime-buildin">Build_In</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- 图像分割子类别 -->
+                        <div class="subcategory-item" id="cv-segmentation">
+                            <div class="subcategory-header" onclick="toggleSubcategory('cv-segmentation-content')">
+                                <h3><i class="fas fa-cut"></i> 图像分割</h3>
+                                <div>
+                                    <span class="subcategory-count">40+ 模型</span>
+                                    <i class="fas fa-chevron-right subcategory-arrow"></i>
+                                </div>
+                            </div>
+                            <div class="models-table-container" id="cv-segmentation-content">
+                                <!-- 分割模型表格 -->
+                            </div>
+                        </div>
+                        
+                        <!-- 人脸相关子类别 -->
+                        <div class="subcategory-item" id="cv-face">
+                            <div class="subcategory-header" onclick="toggleSubcategory('cv-face-content')">
+                                <h3><i class="fas fa-user"></i> 人脸相关</h3>
+                                <div>
+                                    <span class="subcategory-count">30+ 模型</span>
+                                    <i class="fas fa-chevron-right subcategory-arrow"></i>
+                                </div>
+                            </div>
+                            <div class="models-table-container" id="cv-face-content">
+                                <!-- 人脸模型表格 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- NLP 模型 -->
+                <div class="category-card" id="nlp-models">
+                    <div class="category-header" onclick="toggleCategory('nlp-content')">
+                        <h2><i class="fas fa-language"></i> NLP Models - 自然语言处理模型</h2>
+                        <div class="category-stats">
+                            <span class="category-count-large">100+ 模型</span>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                    </div>
+                    <div class="subcategory-panel" id="nlp-content">
+                        <!-- 信息抽取子类别 -->
+                        <div class="subcategory-item" id="nlp-ie">
+                            <div class="subcategory-header" onclick="toggleSubcategory('nlp-ie-content')">
+                                <h3><i class="fas fa-search"></i> 信息抽取</h3>
+                                <div>
+                                    <span class="subcategory-count">10+ 模型</span>
+                                    <i class="fas fa-chevron-right subcategory-arrow"></i>
+                                </div>
+                            </div>
+                            <div class="models-table-container" id="nlp-ie-content">
+                                <table class="models-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="15%">模型</th>
+                                            <th width="20%">代码库</th>
+                                            <th width="30%">模型列表</th>
+                                            <th width="20%">模型类型</th>
+                                            <th width="15%">运行时</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="model-cell">
+                                                <a href="./nlp/information_extraction/uie/README.md" class="model-link">
+                                                    <i class="fas fa-file-alt"></i> uie
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="https://github.com/HUSTAI/uie_pytorch" class="codebase-link" target="_blank">
+                                                    <i class="fab fa-github"></i> uie_pytorch
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="toggle-details" onclick="toggleModelList('nlp-ie-1')">
+                                                    <i class="fas fa-list"></i> 查看模型
+                                                </button>
+                                                <div class="model-list-details" id="nlp-ie-1">
+                                                    <ul>
+                                                        <li>uie-base</li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td><span class="type-badge">信息抽取</span></td>
+                                            <td><span class="runtime-badge runtime-buildin">Build_In</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Embedding子类别 -->
+                        <div class="subcategory-item" id="nlp-embedding">
+                            <div class="subcategory-header active" onclick="toggleSubcategory('nlp-embedding-content')">
+                                <h3><i class="fas fa-layer-group"></i> Embedding模型</h3>
+                                <div>
+                                    <span class="subcategory-count">30+ 模型</span>
+                                    <i class="fas fa-chevron-right subcategory-arrow"></i>
+                                </div>
+                            </div>
+                            <div class="models-table-container expanded" id="nlp-embedding-content">
+                                <table class="models-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="15%">模型</th>
+                                            <th width="20%">代码库</th>
+                                            <th width="30%">模型列表</th>
+                                            <th width="20%">模型类型</th>
+                                            <th width="15%">运行时</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="model-cell">
+                                                <a href="./nlp/text2vec/bge/README.md" class="model-link">
+                                                    <i class="fas fa-file-alt"></i> BGE
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="https://huggingface.co/collections/BAAI/bge-66797a74476eb1f085c7446d" class="codebase-link" target="_blank">
+                                                    <i class="fab fa-hugging-face"></i> Hugging Face
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="toggle-details" onclick="toggleModelList('nlp-emb-1')">
+                                                    <i class="fas fa-list"></i> 查看模型
+                                                </button>
+                                                <div class="model-list-details" id="nlp-emb-1">
+                                                    <ul>
+                                                        <li>bge-m3</li>
+                                                        <li>bge-small-en-v1.5</li>
+                                                        <li>bge-base-en-v1.5</li>
+                                                        <li>bge-large-en-v1.5</li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td><span class="type-badge">embedding model</span></td>
+                                            <td><span class="runtime-badge runtime-buildin">Build_In</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- LLM 模型 -->
+                <div class="category-card" id="llm-models">
+                    <div class="category-header" onclick="toggleCategory('llm-content')">
+                        <h2><i class="fas fa-robot"></i> LLM Models - 大语言模型</h2>
+                        <div class="category-stats">
+                            <span class="category-count-large">150+ 模型</span>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                    </div>
+                    <div class="subcategory-panel" id="llm-content">
+                        <!-- 通用LLM子类别 -->
+                        <div class="subcategory-item" id="llm-general">
+                            <div class="subcategory-header active" onclick="toggleSubcategory('llm-general-content')">
+                                <h3><i class="fas fa-globe"></i> 通用大语言模型</h3>
+                                <div>
+                                    <span class="subcategory-count">100+ 模型</span>
+                                    <i class="fas fa-chevron-right subcategory-arrow"></i>
+                                </div>
+                            </div>
+                            <div class="models-table-container expanded" id="llm-general-content">
+                                <table class="models-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="15%">模型</th>
+                                            <th width="20%">代码库</th>
+                                            <th width="30%">模型列表</th>
+                                            <th width="20%">模型类型</th>
+                                            <th width="15%">运行时</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="model-cell">
+                                                <a href="./llm/qwen3/README.md" class="model-link">
+                                                    <i class="fas fa-file-alt"></i> Qwen3
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="https://huggingface.co/collections/Qwen/qwen3" class="codebase-link" target="_blank">
+                                                    <i class="fab fa-hugging-face"></i> Hugging Face
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="toggle-details" onclick="toggleModelList('llm-gen-1')">
+                                                    <i class="fas fa-list"></i> 查看模型
+                                                </button>
+                                                <div class="model-list-details" id="llm-gen-1">
+                                                    <ul>
+                                                        <li>Qwen3-0.6B</li>
+                                                        <li>Qwen3-1.7B</li>
+                                                        <li>Qwen3-4B</li>
+                                                        <li>Qwen3-8B</li>
+                                                        <li>Qwen3-4B-Instruct-2507</li>
+                                                        <li>Qwen3-4B-Thinking-2507</li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td><span class="type-badge">大语言模型</span></td>
+                                            <td><span class="runtime-badge runtime-buildin">Build_In</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="model-cell">
+                                                <a href="./llm/deepseek_v3/README.md" class="model-link">
+                                                    <i class="fas fa-file-alt"></i> DeepSeek-V3
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="https://huggingface.co/collections/deepseek-ai/deepseek-v3" class="codebase-link" target="_blank">
+                                                    <i class="fab fa-hugging-face"></i> Hugging Face
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="toggle-details" onclick="toggleModelList('llm-gen-2')">
+                                                    <i class="fas fa-list"></i> 查看模型
+                                                </button>
+                                                <div class="model-list-details" id="llm-gen-2">
+                                                    <ul>
+                                                        <li>DeepSeek-V3-Base</li>
+                                                        <li>DeepSeek-V3</li>
+                                                        <li>DeepSeek-V3-0324</li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td><span class="type-badge">大语言模型</span></td>
+                                            <td><span class="runtime-badge runtime-vllm">vLLM</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- 领域LLM子类别 -->
+                        <div class="subcategory-item" id="llm-domain">
+                            <div class="subcategory-header" onclick="toggleSubcategory('llm-domain-content')">
+                                <h3><i class="fas fa-briefcase"></i> 领域大语言模型</h3>
+                                <div>
+                                    <span class="subcategory-count">20+ 模型</span>
+                                    <i class="fas fa-chevron-right subcategory-arrow"></i>
+                                </div>
+                            </div>
+                            <div class="models-table-container" id="llm-domain-content">
+                                <!-- 领域模型表格 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- VLM 模型 -->
+                <div class="category-card" id="vlm-models">
+                    <div class="category-header" onclick="toggleCategory('vlm-content')">
+                        <h2><i class="fas fa-images"></i> VLM Models - 视觉语言模型</h2>
+                        <div class="category-stats">
+                            <span class="category-count-large">50+ 模型</span>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                    </div>
+                    <div class="subcategory-panel" id="vlm-content">
+                        <!-- 通用VLM子类别 -->
+                        <div class="subcategory-item" id="vlm-general">
+                            <div class="subcategory-header active" onclick="toggleSubcategory('vlm-general-content')">
+                                <h3><i class="fas fa-eye"></i> 通用视觉语言模型</h3>
+                                <div>
+                                    <span class="subcategory-count">20+ 模型</span>
+                                    <i class="fas fa-chevron-right subcategory-arrow"></i>
+                                </div>
+                            </div>
+                            <div class="models-table-container expanded" id="vlm-general-content">
+                                <table class="models-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="15%">模型</th>
+                                            <th width="20%">代码库</th>
+                                            <th width="30%">模型列表</th>
+                                            <th width="20%">模型类型</th>
+                                            <th width="15%">运行时</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="model-cell">
+                                                <a href="./vlm/qwen3_vl/README.md" class="model-link">
+                                                    <i class="fas fa-file-alt"></i> Qwen3-VL-30B-A3B
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="https://hf-mirror.com/collections/Qwen/qwen3-vl" class="codebase-link" target="_blank">
+                                                    <i class="fab fa-hugging-face"></i> Hugging Face
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <button class="toggle-details" onclick="toggleModelList('vlm-gen-1')">
+                                                    <i class="fas fa-list"></i> 查看模型
+                                                </button>
+                                                <div class="model-list-details" id="vlm-gen-1">
+                                                    <ul>
+                                                        <li>Qwen3-VL-30B-A3B-Instruct-FP8</li>
+                                                        <li>Qwen3-VL-30B-A3B-Thinking-FP8</li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td><span class="type-badge">视觉语言模型</span></td>
+                                            <td><span class="runtime-badge runtime-vllm">vLLM</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 使用说明 -->
+                <div class="category-card" id="usage">
+                    <div class="category-header active" onclick="toggleCategory('usage-content')">
+                        <h2><i class="fas fa-book"></i> 使用说明</h2>
+                        <div class="category-stats">
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                    </div>
+                    <div class="subcategory-panel expanded" id="usage-content">
+                        <div style="padding: 2rem;">
+                            <h3 style="margin-bottom: 1.5rem; font-size: 1.3rem; color: var(--dark);">快速开始指南</h3>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                                <div style="padding: 1.5rem; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: var(--border-radius);">
+                                    <h4 style="margin-bottom: 1rem; font-size: 1.1rem; color: var(--primary);">
+                                        <i class="fas fa-download"></i> 安装与配置
+                                    </h4>
+                                    <div style="background: var(--dark); color: #c9d1d9; padding: 1rem; border-radius: var(--border-radius-sm); font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.9rem; margin-bottom: 1rem;">
+                                        <span style="color: #58a6ff;"># 克隆仓库</span><br>
+                                        git clone https://github.com/your-org/model-repo.git<br>
+                                        cd model-repo<br><br>
+                                        
+                                        <span style="color: #58a6ff;"># 安装依赖</span><br>
+                                        pip install -r requirements.txt
+                                    </div>
+                                </div>
+                                
+                                <div style="padding: 1.5rem; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: var(--border-radius);">
+                                    <h4 style="margin-bottom: 1rem; font-size: 1.1rem; color: var(--primary);">
+                                        <i class="fas fa-play"></i> 快速示例
+                                    </h4>
+                                    <div style="background: var(--dark); color: #c9d1d9; padding: 1rem; border-radius: var(--border-radius-sm); font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.9rem;">
+                                        <span style="color: #58a6ff;"># 运行CV模型</span><br>
+                                        python examples/cv.py --model yolov8n<br><br>
+                                        
+                                        <span style="color: #58a6ff;"># 运行LLM模型</span><br>
+                                        python examples/llm.py --model Qwen3-4B
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                                <div style="padding: 1.5rem; background: white; border-radius: var(--border-radius); border: 1px solid var(--gray-light);">
+                                    <div style="width: 50px; height: 50px; background: #d4edda; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                                        <i class="fas fa-bolt" style="color: #155724; font-size: 1.2rem;"></i>
+                                    </div>
+                                    <h5 style="margin-bottom: 0.5rem; font-size: 1rem;">Build-In 推理</h5>
+                                    <p style="font-size: 0.9rem; color: var(--gray);">使用内置推理引擎，无需额外服务，适合本地开发和测试。</p>
+                                </div>
+                                
+                                <div style="padding: 1.5rem; background: white; border-radius: var(--border-radius); border: 1px solid var(--gray-light);">
+                                    <div style="width: 50px; height: 50px; background: #d1ecf1; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                                        <i class="fas fa-server" style="color: #0c5460; font-size: 1.2rem;"></i>
+                                    </div>
+                                    <h5 style="margin-bottom: 0.5rem; font-size: 1rem;">vLLM 服务</h5>
+                                    <p style="font-size: 0.9rem; color: var(--gray);">使用vLLM高性能推理服务，支持并发请求，适合生产环境部署。</p>
+                                </div>
+                                
+                                <div style="padding: 1.5rem; background: white; border-radius: var(--border-radius); border: 1px solid var(--gray-light);">
+                                    <div style="width: 50px; height: 50px; background: #e7f1ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                                        <i class="fas fa-download" style="color: var(--primary); font-size: 1.2rem;"></i>
+                                    </div>
+                                    <h5 style="margin-bottom: 0.5rem; font-size: 1rem;">模型下载</h5>
+                                    <p style="font-size: 0.9rem; color: var(--gray);">所有模型均提供Hugging Face或官方代码库下载链接。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2023-2024 综合模型库 | 持续更新中 | 本仓库收集整理了各类优秀的AI模型，旨在为研究者和开发者提供便利的模型使用体验</p>
+                <div class="footer-links">
+                    <a href="https://github.com" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="https://huggingface.co" target="_blank"><i class="fab fa-hugging-face"></i> Hugging Face</a>
+                    <a href="https://pytorch.org" target="_blank"><i class="fas fa-fire"></i> PyTorch</a>
+                    <a href="https://www.tensorflow.org" target="_blank"><i class="fas fa-project-diagram"></i> TensorFlow</a>
+                    <a href="#" onclick="alert('文档更新中...')"><i class="fas fa-file-alt"></i> 文档</a>
+                    <a href="#" onclick="alert('请联系管理员')"><i class="fas fa-question-circle"></i> 帮助</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 切换大类内容显示/隐藏
+        function toggleCategory(categoryId) {
+            const content = document.getElementById(categoryId);
+            const header = content.previousElementSibling;
+            
+            content.classList.toggle('expanded');
+            header.classList.toggle('active');
+        }
+        
+        // 切换子类别内容显示/隐藏
+        function toggleSubcategory(subcategoryId) {
+            const content = document.getElementById(subcategoryId);
+            const header = content.previousElementSibling;
+            
+            content.classList.toggle('expanded');
+            header.classList.toggle('active');
+            
+            // 添加动画效果
+            content.classList.add('fade-in');
+            setTimeout(() => {
+                content.classList.remove('fade-in');
+            }, 300);
+        }
+        
+        // 切换侧边栏子类别显示/隐藏
+        function toggleSubcategories(subId) {
+            const sublist = document.getElementById(subId);
+            const button = sublist.previousElementSibling;
+            
+            sublist.classList.toggle('expanded');
+            const icon = button.querySelector('i');
+            if (sublist.classList.contains('expanded')) {
+                icon.className = 'fas fa-chevron-up';
+            } else {
+                icon.className = 'fas fa-chevron-down';
+            }
+        }
+        
+        // 切换模型列表显示/隐藏
+        function toggleModelList(modelId) {
+            const details = document.getElementById(modelId);
+            if (details.style.display === 'block') {
+                details.style.display = 'none';
+            } else {
+                // 隐藏其他打开的详情
+                document.querySelectorAll('.model-list-details').forEach(el => {
+                    if (el.id !== modelId) el.style.display = 'none';
+                });
+                details.style.display = 'block';
+            }
+        }
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置侧边导航点击效果
+            document.querySelectorAll('.category-list > li > a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    
+                    // 移除所有active类
+                    document.querySelectorAll('.category-list > li > a').forEach(a => {
+                        a.classList.remove('active');
+                    });
+                    
+                    // 添加当前active类
+                    this.classList.add('active');
+                    
+                    // 滚动到目标位置
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        // 确保大类是展开的
+                        const categoryCard = targetElement.closest('.category-card');
+                        if (categoryCard) {
+                            const categoryHeader = categoryCard.querySelector('.category-header');
+                            const categoryContent = categoryCard.querySelector('.subcategory-panel');
+                            
+                            if (!categoryHeader.classList.contains('active')) {
+                                categoryHeader.classList.add('active');
+                                categoryContent.classList.add('expanded');
+                            }
+                        }
+                        
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 120,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // 设置子类别导航点击效果
+            document.querySelectorAll('.subcategory-list a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    
+                    // 滚动到目标位置
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        // 确保子类别是展开的
+                        const subcategoryHeader = targetElement.querySelector('.subcategory-header');
+                        const subcategoryContent = targetElement.querySelector('.models-table-container');
+                        
+                        if (subcategoryHeader && !subcategoryHeader.classList.contains('active')) {
+                            subcategoryHeader.classList.add('active');
+                            subcategoryContent.classList.add('expanded');
+                        }
+                        
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 120,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // 初始化时打开第一个大类的第一个子类别
+            const firstSubcategory = document.querySelector('.subcategory-item');
+            if (firstSubcategory) {
+                const header = firstSubcategory.querySelector('.subcategory-header');
+                const content = firstSubcategory.querySelector('.models-table-container');
+                if (header && content) {
+                    header.classList.add('active');
+                    content.classList.add('expanded');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
